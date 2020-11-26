@@ -40,9 +40,8 @@ function ifEmptyInput(ifIEmpty, nameOfIt) {
     }
 }
 
-
-/*
-First task 
+/**
+*First task 
 */
 let autoObj = {
 manufacturer: "Ferrari",
@@ -116,9 +115,10 @@ function calculateTime(speed, distance) {
     }
  }
 
-//  function multipleObj(objName_1, objName_2, myContainer) {
-//      alert(${objName_1[numerator]});
-//  }
+ function multipleObj(objName_1, objName_2, myContainer) {
+     alert(${objName_1[numerator]});
+ }
+//  I want to have some experiment with Git
 
 
 
