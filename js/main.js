@@ -26,99 +26,112 @@ function getInput(idInput) {
     return inputValue_1;
 }
 
-/**
- * This function checks input, and if it is empty or has fraction the function show the message about this for users.
- */
-function ifEmptyInput(ifIEmpty, nameOfIt) {
-    if((ifIEmpty === undefined) || (ifIEmpty === null) || (ifIEmpty === "")) {
-        alert(`Please, add the ${nameOfIt}`);
-        return 0;
-    }
-    if(ifIEmpty != Math.floor(ifIEmpty)) {
-        alert(`Number at the field ${nameOfIt} must be without fraction`);
-        return 0;
-    }
-}
-
-/**
-*First task 
-*/
-let autoObj = {
-manufacturer: "Ferrari",
-model: "Portifino",
-"year of manufacture": 2017,
-"average speed": 200,
-}
-
-function showObj(nameOfObj) {
-    deleteOutput();
-    let i = 1;
-    let container = document.getElementById("container");
-    container.insertAdjacentHTML('beforeend', `<p class="outputResult">Car information:</p>`);
-    for(el in nameOfObj) {
-        container.insertAdjacentHTML('beforeend', `<p class="outputResult">${i}. ${el}: ${nameOfObj[el]}.</p>`);
-        i++;
-    }
-}
-
-function addElToObj(nameOfObj, property, propertyValue) {
-    ifEmptyInput(property, "name of the property.");
-    if(ifEmptyInput(property, "name of the property.") === 0) {
-        return;
-    }
-    ifEmptyInput(propertyValue, "value of the property.");
-    if(ifEmptyInput(propertyValue, "value of the property.") === 0) {
-        return;
-    }
-    nameOfObj[property] = propertyValue;
-}
-
-function calculateTime(speed, distance) {
-    let timeMoreThan_5 = Math.floor(distance / (speed * 4));
-    let time;
-    if(timeMoreThan_5 === distance / (speed * 4)) {
-        time = timeMoreThan_5 * 5 - 1;
-    } else {
-        time = timeMoreThan_5 * 5 + ((distance - speed * timeMoreThan_5 * 4)/speed);
-    }
-
-    deleteOutput();
-    let container = document.getElementById("container");
-    container.insertAdjacentHTML('beforeend', `<p class="outputResult">
-    You will need ${time} hours to cover a distance of ${distance} km.</p>`);
-}
 
 /**
  * Second task
  */
-
- function createObjFraction(nameObj, myNumerator, myDenominator, myContainer) {
-    let container = document.getElementById(myContainer);
-    deleteOutput(myContainer); 
-    if(ifEmptyInput(myNumerator, "numerator") === 0) {
-        return;
+/**
+ * This function checks input, and if it is empty or has fraction the function show the message about this for users.
+ */
+function ifEmptyInput(ifIEmpty) {
+    if((ifIEmpty === undefined) || (ifIEmpty === null) || (ifIEmpty === "")) {
+        alert(`Please, fill in all fields`);
+        return true;
     }
-    if(ifEmptyInput(myDenominator, "denominator") === 0) {
-        return;
+    if(ifIEmpty != Math.floor(ifIEmpty)) {
+        alert(`Numbers must be without fraction`);
+        return true;
+    }
+}
+
+ function checkInput(myNumerator, myDenominator) {
+    let container = document.getElementById('container');
+    if(ifEmptyInput(myNumerator) || ifEmptyInput(myDenominator)) {
+        return true;
     }
     if(myDenominator == 0) {
-        return alert("Denominator can not be 0");
-    }
-    container.insertAdjacentHTML('beforeend', `<p class="outputResult">${nameObj} object:</p>`);
-    nameObj = {
-         numerator: myNumerator,
-         denominator: myDenominator,
-     }
-     
-    for(el in nameObj) {
-        container.insertAdjacentHTML('beforeend', `<p class="outputResult">${el}: ${nameObj[el]}</p>`);
+        alert("Denominator can not be 0");
+        return true;
     }
  }
 
- function multipleObj(objName_1, objName_2, myContainer) {
-     alert(${objName_1[numerator]});
+ function shortenObj(myNumerator, myDenominator) {
+    let biggestDivider = 1; 
+    for(let i = 2; i <= myNumerator; i++) {
+         if((myNumerator % i === 0) && (myDenominator % i === 0)) {
+             biggestDivider = i;
+         }
+     }
+     return biggestDivider;
  }
-//  I want to have some experiment with Git
+
+ class fractions {
+    constructor(_numerator, _denominator, _container) {
+        this.numerator = _numerator/shortenObj(_numerator, _denominator);
+        this.denominator = _denominator/shortenObj(_numerator, _denominator);
+        this.container = _container;
+    }
+    output() {
+        let container = document.getElementById(`${this.container}`);
+        while (container.firstChild) {
+            container.removeChild(container.firstChild);
+        }
+        container.insertAdjacentHTML('beforeend', `<p class="outputResult">${this.numerator} / ${this.denominator}</p>`);
+    }
+}
+
+ function createFirstTwoObj(myNumerator_1, myDenominator_1, myNumerator_2, myDenominator_2) {
+    let firstObj = new fractions(myNumerator_1, myDenominator_1, "container");
+    let secondObj = new fractions(myNumerator_2, myDenominator_2, "container_2");
+    firstObj.output();
+    secondObj.output();
+ }
+
+ function multipleObj(myNumerator_1, myDenominator_1, myNumerator_2, myDenominator_2) {
+    if(checkInput(myNumerator_1, myDenominator_1) || checkInput( myNumerator_2, myDenominator_2)) {
+        deleteOutput("container");
+        deleteOutput("container_2");
+        deleteOutput("container_3");
+        return;}
+    createFirstTwoObj(myNumerator_1, myDenominator_1, myNumerator_2, myDenominator_2);
+    let resultObj = new fractions(myNumerator_1 * myNumerator_2, myDenominator_1 * myDenominator_2, "container_3");
+    resultObj.output();
+ }
+
+ function divideObj(myNumerator_1, myDenominator_1, myNumerator_2, myDenominator_2) {
+    if(checkInput(myNumerator_1, myDenominator_1) || checkInput( myNumerator_2, myDenominator_2)) {
+        deleteOutput("container");
+        deleteOutput("container_2");
+        deleteOutput("container_3");
+        return;}
+    createFirstTwoObj(myNumerator_1, myDenominator_1, myNumerator_2, myDenominator_2);
+    let resultObj = new fractions(myNumerator_1 * myDenominator_2, myDenominator_1 * myNumerator_2, "container_3");
+    resultObj.output();
+ }
+
+ function addObj(myNumerator_1, myDenominator_1, myNumerator_2, myDenominator_2) {
+    if(checkInput(myNumerator_1, myDenominator_1) || checkInput( myNumerator_2, myDenominator_2)) {
+        deleteOutput("container");
+        deleteOutput("container_2");
+        deleteOutput("container_3");
+        return;}
+    createFirstTwoObj(myNumerator_1, myDenominator_1, myNumerator_2, myDenominator_2);
+    let resultObj = new fractions(myNumerator_1 * myDenominator_2 + myNumerator_2 * myDenominator_1, myDenominator_1 * myDenominator_2, "container_3");
+    resultObj.output();
+ }
+
+ function subtractObj(myNumerator_1, myDenominator_1, myNumerator_2, myDenominator_2) {
+    if(checkInput(myNumerator_1, myDenominator_1) || checkInput( myNumerator_2, myDenominator_2)) {
+        deleteOutput("container");
+        deleteOutput("container_2");
+        deleteOutput("container_3");
+        return;}
+    createFirstTwoObj(myNumerator_1, myDenominator_1, myNumerator_2, myDenominator_2);
+    let resultObj = new fractions(myNumerator_1 * myDenominator_2 - myNumerator_2 * myDenominator_1, myDenominator_1 * myDenominator_2, "container_3");
+    resultObj.output();
+ }
+
+
 
 
 
